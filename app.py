@@ -130,7 +130,6 @@ with st.sidebar:
         st.rerun()
 
 # ========== LARGE BASE LISTS ==========
-# 3 conversations per lesson (60 total, but we'll generate dynamically using templates)
 conversation_templates = [
     ("Student", "Professor", "Topic: University Registration"),
     ("Student A", "Student B", "Topic: Library Study Habits"),
@@ -155,31 +154,33 @@ conversation_templates = [
 ]
 
 def generate_conversation(lesson_num):
-    # Use a deterministic pattern to generate 3 unique conversations per lesson
-    topics = [
-        f"Discussing {['university', 'work', 'travel', 'health', 'technology', 'environment', 'education', 'culture'][(lesson_num + i) % 8]}",
-        f"Solving a problem about {['deadline', 'budget', 'schedule', 'resource', 'communication', 'quality', 'teamwork', 'leadership'][(lesson_num + i) % 8]}",
-        f"Expressing opinion on {['climate change', 'online learning', 'social media', 'artificial intelligence', 'remote work', 'fitness', 'nutrition', 'mental health'][(lesson_num + i) % 8]}"
-    ]
+    """Generate 3 unique conversations for the given lesson."""
     convos = []
+    topics_lists = [
+        ['university', 'work', 'travel', 'health', 'technology', 'environment', 'education', 'culture'],
+        ['deadline', 'budget', 'schedule', 'resource', 'communication', 'quality', 'teamwork', 'leadership'],
+        ['climate change', 'online learning', 'social media', 'artificial intelligence', 'remote work', 'fitness', 'nutrition', 'mental health']
+    ]
     for i in range(3):
         speaker1, speaker2, _ = conversation_templates[(lesson_num + i) % len(conversation_templates)]
-        topic = topics[i]
-        convos.append(f"""
-        **Conversation {i+1} – {topic}**
-        
-        **{speaker1}:** Hello! How are you doing today?
-        
-        **{speaker2}:** I'm great, thanks! I've been thinking about {topic}.
-        
-        **{speaker1}:** That's interesting. Could you tell me more?
-        
-        **{speaker2}:** Sure. In my opinion, {topic} is very important for TOEFL preparation.
-        
-        **{speaker1}:** I agree. Let's practice some key vocabulary and phrases.
-        
-        **{speaker2}:** That would be very helpful. Thank you!
-        """)
+        topic_list = topics_lists[i % len(topics_lists)]
+        topic = topic_list[(lesson_num + i) % len(topic_list)]
+        conv = f"""
+**Conversation {i+1} – Discussing {topic.title()}**
+
+**{speaker1}:** Hello! How are you doing today?
+
+**{speaker2}:** I'm great, thanks! I've been thinking about {topic}.
+
+**{speaker1}:** That's interesting. Could you tell me more?
+
+**{speaker2}:** Sure. In my opinion, {topic} is very important for TOEFL preparation.
+
+**{speaker1}:** I agree. Let's practice some key vocabulary and phrases.
+
+**{speaker2}:** That would be very helpful. Thank you!
+        """
+        convos.append(conv)
     return convos
 
 # Vocabulary words (2000+ items)
