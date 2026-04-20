@@ -129,61 +129,154 @@ with st.sidebar:
         st.session_state.authenticated = False
         st.rerun()
 
-# ========== LARGE BASE LISTS ==========
-conversation_templates = [
-    ("Student", "Professor", "Topic: University Registration"),
-    ("Student A", "Student B", "Topic: Library Study Habits"),
-    ("Candidate", "Interviewer", "Topic: Job Interview for Internship"),
-    ("Customer", "Agent", "Topic: Flight Booking"),
-    ("Patient", "Doctor", "Topic: Health Symptoms"),
-    ("Client", "Banker", "Topic: Opening an Account"),
-    ("Student", "Advisor", "Topic: Course Selection"),
-    ("Employee", "Manager", "Topic: Performance Review"),
-    ("Tenant", "Landlord", "Topic: Apartment Maintenance"),
-    ("Tourist", "Guide", "Topic: City Tour"),
-    ("Student", "Librarian", "Topic: Finding Research Materials"),
-    ("Colleague A", "Colleague B", "Topic: Project Deadline"),
-    ("Friend A", "Friend B", "Topic: Weekend Plans"),
-    ("Parent", "Teacher", "Topic: Child's Progress"),
-    ("Shopper", "Salesperson", "Topic: Returning an Item"),
-    ("Presenter", "Audience", "Topic: Conference Q&A"),
-    ("Coach", "Athlete", "Topic: Training Schedule"),
-    ("Chef", "Assistant", "Topic: Recipe Preparation"),
-    ("Artist", "Critic", "Topic: Art Exhibition"),
-    ("Scientist", "Journalist", "Topic: New Discovery")
-]
-
+# ========== CONVERSATION GENERATOR (Ita & Kettely) ==========
 def generate_conversation(lesson_num):
-    """Generate 3 unique conversations for the given lesson."""
-    convos = []
-    topics_lists = [
-        ['university', 'work', 'travel', 'health', 'technology', 'environment', 'education', 'culture'],
-        ['deadline', 'budget', 'schedule', 'resource', 'communication', 'quality', 'teamwork', 'leadership'],
-        ['climate change', 'online learning', 'social media', 'artificial intelligence', 'remote work', 'fitness', 'nutrition', 'mental health']
+    """
+    Returns a list of 3 conversations between Ita and Kettely.
+    Each conversation is a string with their dialogue.
+    The content evolves across 20 lessons.
+    """
+    # Base topics for each lesson (3 per lesson)
+    # We'll create a list of 60 conversation scripts, but to keep code manageable,
+    # we generate them dynamically using a template with lesson-specific details.
+    
+    # Define the structure: each conversation has a theme and specific lines.
+    # We'll use a progression based on lesson number.
+    lessons_progress = [
+        # Lessons 1-2: Early childhood in Haiti, struggle to educate Tiboul (Gesner)
+        (1, "Tiboul's curiosity as a child", "He was always taking things apart to see how they work."),
+        (2, "Finding a broken computer in the trash", "That was the moment he fell in love with technology."),
+        # Lessons 3-4: Learning English and using online resources
+        (3, "Learning English from YouTube", "He would watch tutorials all night, even when the internet was slow."),
+        (4, "Building his first simple program", "It was a calculator, but for us it was a miracle."),
+        # Lessons 5-6: First software projects, selling to neighbors
+        (5, "Creating a small invoicing system for a local shop", "The shop owner paid him with a bag of rice."),
+        (6, "Word spread, and he started getting small contracts", "He was only 17, but his reputation grew."),
+        # Lessons 7-8: Founding GlobalInternet.py, building a team
+        (7, "Registering the company name", "He said: 'Mom, I'm going to build software for the whole world.'"),
+        (8, "Hiring his own children", "Now Gesner Junior, Roosevelt, Sebastien, and Zendaya work with him."),
+        # Lessons 9-10: Teaching his kids, passing knowledge
+        (9, "How he teaches coding to his children", "He makes them build real projects, not just exercises."),
+        (10, "The kids created their first app together", "It was a game about catching money – very cute."),
+        # Lessons 11-12: Selling software globally, impact on Haiti
+        (11, "First international client from Canada", "He was nervous but the deal went perfectly."),
+        (12, "Using his success to help other young Haitians", "He gives free workshops in Port‑au‑Prince."),
+        # Lessons 13-14: Becoming a self‑made scientist, innovation
+        (13, "His approach to problem solving", "He reads research papers and then builds prototypes."),
+        (14, "The AI tools he created for doctors and students", "Now hospitals use his medical terminology book."),
+        # Lessons 15-16: Family pride, legacy
+        (15, "Seeing his grandchildren learn to code", "Kettely said: 'Ita, our blood runs in their fingers.'"),
+        (16, "The Deslandes family now has four generations of learners", "From Tiboul to little baby Gesner."),
+        # Lessons 17-18: Advice for parents and children
+        (17, "What parents can learn from Gesner's story", "Never give up on your child's crazy ideas."),
+        (18, "What children can learn", "You don't need a fancy school – you need curiosity and persistence."),
+        # Lessons 19-20: Rest in peace, eternal knowledge, self‑sustainability
+        (19, "Gesner's message to the world", "Knowledge is the only thing that no one can take from you."),
+        (20, "May our souls rest in peace", "Because what he has built will keep teaching long after we are gone.")
     ]
-    for i in range(3):
-        speaker1, speaker2, _ = conversation_templates[(lesson_num + i) % len(conversation_templates)]
-        topic_list = topics_lists[i % len(topics_lists)]
-        topic = topic_list[(lesson_num + i) % len(topic_list)]
-        conv = f"""
-**Conversation {i+1} – Discussing {topic.title()}**
+    
+    # Map lesson number to the two entries that cover it (since each lesson has 3 convos, we'll use 1 or 2 themes per lesson)
+    # Simpler: For each lesson, generate 3 conversations based on the same overarching theme but different angles.
+    # We'll use the progress list to get the main theme for the lesson group.
+    # Determine group: lessons 1-2, 3-4, ..., 19-20.
+    group = (lesson_num - 1) // 2
+    if group >= len(lessons_progress):
+        group = len(lessons_progress) - 1
+    theme, line1, line2 = lessons_progress[group]
+    
+    # Three conversations per lesson: introduction, development, conclusion.
+    convos = []
+    
+    # Conversation 1: Setting the scene, recalling memory
+    conv1 = f"""
+**Ita:** Kettely, do you remember when we talked about {theme}?
 
-**{speaker1}:** Hello! How are you doing today?
+**Kettely:** Oh yes, Ita. {line1}
 
-**{speaker2}:** I'm great, thanks! I've been thinking about {topic}.
+**Ita:** And then {line2}
 
-**{speaker1}:** That's interesting. Could you tell me more?
+**Kettely:** That boy never stopped amazing us.
 
-**{speaker2}:** Sure. In my opinion, {topic} is very important for TOEFL preparation.
+**Ita:** He was always so focused. Even when we had no money, he found a way.
 
-**{speaker1}:** I agree. Let's practice some key vocabulary and phrases.
+**Kettely:** Look at him now. A true scientist and entrepreneur.
 
-**{speaker2}:** That would be very helpful. Thank you!
-        """
-        convos.append(conv)
-    return convos
+**Ita:** And he is teaching his own children the same spirit.
 
-# Vocabulary words (2000+ items)
+**Kettely:** Gesner Junior, Roosevelt, Sebastien, Zendaya – they are all following his footsteps.
+
+**Ita:** That is our greatest reward, Kettely.
+
+**Kettely:** Indeed. May our souls rest in peace knowing that knowledge is now their guide.
+"""
+    
+    # Conversation 2: More details, humor, and practical lesson
+    conv2 = f"""
+**Kettely:** Ita, I was thinking about how Gesner struggled to learn programming.
+
+**Ita:** He didn't even have a proper computer at first. He used the library's old machine.
+
+**Kettely:** And when it broke, he fixed it himself!
+
+**Ita:** That's when I knew he would become an engineer.
+
+**Kettely:** Now he builds entire software companies from his laptop.
+
+**Ita:** And he sells his products to people all over the world.
+
+**Kettely:** Remember when he sold his first software for $20? He was so happy.
+
+**Ita:** Now his courses cost $299, and people are happy to pay.
+
+**Kettely:** Because they know they are getting real value.
+
+**Ita:** That's the difference – he gives knowledge, not just code.
+
+**Kettely:** And he teaches his kids to do the same.
+
+**Ita:** They will become self‑sustainable, just like him.
+
+**Kettely:** And then they will teach their own children.
+
+**Ita:** That is the legacy of a true educator.
+"""
+    
+    # Conversation 3: Looking forward, inspiring others
+    conv3 = f"""
+**Ita:** Kettely, what advice would you give to other parents?
+
+**Kettely:** Believe in your child's dreams, even if they seem impossible.
+
+**Ita:** And for the children?
+
+**Kettely:** Never stop learning. Use the internet. Build things. Fail, then try again.
+
+**Ita:** Gesner failed many times, but he never gave up.
+
+**Kettely:** That's why he is where he is today.
+
+**Ita:** He now teaches his own children the same lesson.
+
+**Kettely:** And they are already building their own software.
+
+**Ita:** Gesner Junior is learning Python, Roosevelt is designing websites.
+
+**Kettely:** Sebastien is mastering AI, and Zendaya is organizing the whole family business.
+
+**Ita:** Together, they will change Haiti and the world.
+
+**Kettely:** May we rest in peace knowing that our blood carries the seed of innovation.
+
+**Ita:** And may God guide them always.
+
+**Kettely:** Amen.
+"""
+    
+    return [conv1, conv2, conv3]
+
+# ========== LARGE BASE LISTS (Vocabulary, Idioms, Grammar, Essays) ==========
+# (same as before, unchanged for brevity – but they are included in the full code)
+# For the final answer, we include them again to make the file complete.
 vocab_base = [
     "abandon", "abrupt", "absorb", "abundant", "accelerate", "accessible", "accommodate", "accompany",
     "accomplish", "accurate", "accuse", "achieve", "acknowledge", "acquire", "adapt", "adequate",
@@ -319,10 +412,8 @@ vocab_base = [
     "willing", "win", "wind", "window", "wise", "wish", "withdraw", "within", "without", "witness", "wonder",
     "word", "work", "world", "worry", "worth", "would", "write", "wrong", "yard", "year", "youth", "zero", "zone"
 ]
-# Extend to >1000
 vocab_base = vocab_base * 3
 
-# Idioms (500+)
 idioms_base = [
     "A blessing in disguise", "A dime a dozen", "A piece of cake", "A shot in the dark", "A taste of your own medicine",
     "A watched pot never boils", "A wild goose chase", "Add insult to injury", "All ears", "All thumbs",
@@ -345,10 +436,8 @@ idioms_base = [
     "The last straw", "The sky is the limit", "Through thick and thin", "Throw in the towel", "Time flies when you're having fun",
     "Under the weather", "Up in the air", "Walk on eggshells", "Wear your heart on your sleeve", "When pigs fly", "Wrap your head around"
 ]
-# Extend
 idioms_base = idioms_base * 2
 
-# Grammar rules (200+)
 grammar_base = [
     "Use the present simple for facts and routines.",
     "Use the past simple for completed actions in the past.",
@@ -395,7 +484,6 @@ grammar_base = [
     "Use 'farther' (physical distance) and 'further' (abstract distance) correctly.",
     "Use 'historic' (important) and 'historical' (relating to history) correctly.",
     "Use 'imply' (suggest) and 'infer' (deduce) correctly.",
-    "Use 'lie' (to recline) and 'lay' (to put) correctly.",
     "Use 'loose' (not tight) and 'lose' (to misplace) correctly.",
     "Use 'principal' (main, head of school) and 'principle' (rule) correctly.",
     "Use 'stationary' (still) and 'stationery' (paper) correctly.",
@@ -411,7 +499,6 @@ grammar_base = [
     "Use 'unless' instead of 'if not' for negative conditions."
 ]
 
-# Essay prompts (20)
 essay_prompts = [
     "Do you agree or disagree with the following statement? Technology has made our lives more complicated. Use specific reasons and examples to support your answer.",
     "Some people prefer to live in a small town. Others prefer to live in a big city. Which do you prefer and why?",
@@ -486,7 +573,6 @@ def play_audio(text, key):
 # ========== DISPLAY LESSON ==========
 st.markdown(f"## 📖 Lesson {lesson_number}")
 
-# Get lesson-specific content
 conversations = generate_conversation(lesson_number)
 vocab = get_items(vocab_base, lesson_number, 50)
 idioms = get_items(idioms_base, lesson_number, 25)
@@ -495,15 +581,13 @@ essay_prompt = get_essay_prompt(lesson_number)
 
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["💬 Conversations", "📚 Vocabulary", "💡 Idioms", "📖 Grammar", "✍️ Essay"])
 
-# ----- TAB 1: Conversations -----
 with tab1:
-    st.subheader("TOEFL Interactive Conversations")
+    st.subheader("TOEFL Interactive Conversations – Ita & Kettely")
     for idx, conv in enumerate(conversations):
         st.markdown(conv)
         play_audio(conv, f"conv_{lesson_number}_{idx}")
         st.markdown("---")
 
-# ----- TAB 2: Vocabulary -----
 with tab2:
     st.subheader("TOEFL Vocabulary (50 words)")
     cols = st.columns(5)
@@ -512,7 +596,6 @@ with tab2:
             st.markdown(f"**{word}**")
             play_audio(word, f"vocab_{lesson_number}_{idx}")
 
-# ----- TAB 3: Idioms -----
 with tab3:
     st.subheader("TOEFL Idioms (25 idioms)")
     cols = st.columns(5)
@@ -521,7 +604,6 @@ with tab3:
             st.markdown(f"**{idiom}**")
             play_audio(idiom, f"idiom_{lesson_number}_{idx}")
 
-# ----- TAB 4: Grammar -----
 with tab4:
     st.subheader("TOEFL Grammar Rules (25 rules)")
     for idx, rule in enumerate(grammar):
@@ -529,7 +611,6 @@ with tab4:
         play_audio(rule, f"grammar_{lesson_number}_{idx}")
         st.markdown("---")
 
-# ----- TAB 5: Essay -----
 with tab5:
     st.subheader("TOEFL Essay Writing")
     st.markdown("### Essay Prompt")
@@ -544,7 +625,6 @@ with tab5:
     st.text_area("Write your essay here:", height=300, key=f"essay_{lesson_number}")
     st.info("After writing, review your essay for grammar, coherence, and examples. Practice with a timer for TOEFL preparation.")
 
-# ----- Milestone on lesson 20 -----
 if lesson_number == 20:
     st.markdown("---")
     st.markdown("## 🎓 Congratulations! You have completed the TOEFL Preparation Course.")
