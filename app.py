@@ -129,154 +129,84 @@ with st.sidebar:
         st.session_state.authenticated = False
         st.rerun()
 
-# ========== CONVERSATION GENERATOR (Ita & Kettely) ==========
+# ========== NATURAL CONVERSATIONS (Ita & Kettely) ==========
 def generate_conversation(lesson_num):
-    """
-    Returns a list of 3 conversations between Ita and Kettely.
-    Each conversation is a string with their dialogue.
-    The content evolves across 20 lessons.
-    """
-    # Base topics for each lesson (3 per lesson)
-    # We'll create a list of 60 conversation scripts, but to keep code manageable,
-    # we generate them dynamically using a template with lesson-specific details.
-    
-    # Define the structure: each conversation has a theme and specific lines.
-    # We'll use a progression based on lesson number.
-    lessons_progress = [
-        # Lessons 1-2: Early childhood in Haiti, struggle to educate Tiboul (Gesner)
-        (1, "Tiboul's curiosity as a child", "He was always taking things apart to see how they work."),
-        (2, "Finding a broken computer in the trash", "That was the moment he fell in love with technology."),
-        # Lessons 3-4: Learning English and using online resources
-        (3, "Learning English from YouTube", "He would watch tutorials all night, even when the internet was slow."),
-        (4, "Building his first simple program", "It was a calculator, but for us it was a miracle."),
-        # Lessons 5-6: First software projects, selling to neighbors
-        (5, "Creating a small invoicing system for a local shop", "The shop owner paid him with a bag of rice."),
-        (6, "Word spread, and he started getting small contracts", "He was only 17, but his reputation grew."),
-        # Lessons 7-8: Founding GlobalInternet.py, building a team
-        (7, "Registering the company name", "He said: 'Mom, I'm going to build software for the whole world.'"),
-        (8, "Hiring his own children", "Now Gesner Junior, Roosevelt, Sebastien, and Zendaya work with him."),
-        # Lessons 9-10: Teaching his kids, passing knowledge
-        (9, "How he teaches coding to his children", "He makes them build real projects, not just exercises."),
-        (10, "The kids created their first app together", "It was a game about catching money – very cute."),
-        # Lessons 11-12: Selling software globally, impact on Haiti
-        (11, "First international client from Canada", "He was nervous but the deal went perfectly."),
-        (12, "Using his success to help other young Haitians", "He gives free workshops in Port‑au‑Prince."),
-        # Lessons 13-14: Becoming a self‑made scientist, innovation
-        (13, "His approach to problem solving", "He reads research papers and then builds prototypes."),
-        (14, "The AI tools he created for doctors and students", "Now hospitals use his medical terminology book."),
-        # Lessons 15-16: Family pride, legacy
-        (15, "Seeing his grandchildren learn to code", "Kettely said: 'Ita, our blood runs in their fingers.'"),
-        (16, "The Deslandes family now has four generations of learners", "From Tiboul to little baby Gesner."),
-        # Lessons 17-18: Advice for parents and children
-        (17, "What parents can learn from Gesner's story", "Never give up on your child's crazy ideas."),
-        (18, "What children can learn", "You don't need a fancy school – you need curiosity and persistence."),
-        # Lessons 19-20: Rest in peace, eternal knowledge, self‑sustainability
+    """Return 3 clean conversations (no asterisks) between Ita and Kettely."""
+    # Themes for each lesson (grouped in pairs)
+    themes = [
+        (1, "Tiboul's childhood curiosity", "He would take everything apart to see how it worked."),
+        (2, "finding a broken computer in the trash", "That's when he fell in love with technology."),
+        (3, "learning English from YouTube", "He watched tutorials all night, even with slow internet."),
+        (4, "building his first simple program", "It was a calculator, but for us it was a miracle."),
+        (5, "creating a small invoicing system for a local shop", "The shop owner paid him with a bag of rice."),
+        (6, "word of mouth and his first contracts", "He was only 17, but his reputation grew."),
+        (7, "founding GlobalInternet.py", "He said: 'Mom, I'm going to build software for the whole world.'"),
+        (8, "hiring his own children", "Today, Gesner Junior, Roosevelt, Sebastien and Zendaya work with him."),
+        (9, "how he teaches coding to his children", "He makes them build real projects, not just exercises."),
+        (10, "the children create their first app together", "A game about catching money – very cute."),
+        (11, "first international client from Canada", "He was nervous, but the deal went perfectly."),
+        (12, "using his success to help other young Haitians", "He gives free workshops in Port‑au‑Prince."),
+        (13, "his approach to problem solving", "He reads research papers and then builds prototypes."),
+        (14, "the AI tools he created for doctors and students", "Now hospitals use his medical terminology book."),
+        (15, "seeing his grandchildren learn to code", "Kettely said: 'Ita, our blood flows in their fingers.'"),
+        (16, "four generations of learners in the Deslandes family", "From Tiboul to baby Gesner."),
+        (17, "advice for parents", "Never give up on your child's crazy ideas."),
+        (18, "advice for children", "You don't need a fancy school – you need curiosity and persistence."),
         (19, "Gesner's message to the world", "Knowledge is the only thing that no one can take from you."),
-        (20, "May our souls rest in peace", "Because what he has built will keep teaching long after we are gone.")
+        (20, "may our souls rest in peace", "Because what he built will keep teaching long after we are gone.")
     ]
-    
-    # Map lesson number to the two entries that cover it (since each lesson has 3 convos, we'll use 1 or 2 themes per lesson)
-    # Simpler: For each lesson, generate 3 conversations based on the same overarching theme but different angles.
-    # We'll use the progress list to get the main theme for the lesson group.
-    # Determine group: lessons 1-2, 3-4, ..., 19-20.
     group = (lesson_num - 1) // 2
-    if group >= len(lessons_progress):
-        group = len(lessons_progress) - 1
-    theme, line1, line2 = lessons_progress[group]
+    if group >= len(themes):
+        group = len(themes) - 1
+    theme, phrase1, phrase2 = themes[group]
     
-    # Three conversations per lesson: introduction, development, conclusion.
-    convos = []
+    # Conversation 1
+    conv1 = f"""Ita: Kettely, do you remember {theme}?
+Kettely: Oh yes, Ita. {phrase1}
+Ita: And then {phrase2}
+Kettely: That boy never stopped amazing us.
+Ita: He was always so focused. Even when we had no money, he found a way.
+Kettely: Look at him now. A true scientist and entrepreneur.
+Ita: And he is teaching his own children the same spirit.
+Kettely: Gesner Junior, Roosevelt, Sebastien, Zendaya – they are all following his footsteps.
+Ita: That is our greatest reward, Kettely.
+Kettely: Indeed. May our souls rest in peace knowing that knowledge is now their guide."""
     
-    # Conversation 1: Setting the scene, recalling memory
-    conv1 = f"""
-**Ita:** Kettely, do you remember when we talked about {theme}?
-
-**Kettely:** Oh yes, Ita. {line1}
-
-**Ita:** And then {line2}
-
-**Kettely:** That boy never stopped amazing us.
-
-**Ita:** He was always so focused. Even when we had no money, he found a way.
-
-**Kettely:** Look at him now. A true scientist and entrepreneur.
-
-**Ita:** And he is teaching his own children the same spirit.
-
-**Kettely:** Gesner Junior, Roosevelt, Sebastien, Zendaya – they are all following his footsteps.
-
-**Ita:** That is our greatest reward, Kettely.
-
-**Kettely:** Indeed. May our souls rest in peace knowing that knowledge is now their guide.
-"""
+    # Conversation 2
+    conv2 = f"""Kettely: Ita, I was thinking about how Gesner struggled to learn programming.
+Ita: He didn't even have a proper computer at first. He used the library's old machine.
+Kettely: And when it broke, he fixed it himself!
+Ita: That's when I knew he would become an engineer.
+Kettely: Now he builds entire software companies from his laptop.
+Ita: And he sells his products to people all over the world.
+Kettely: Remember when he sold his first software for $20? He was so happy.
+Ita: Now his courses cost $299, and people are happy to pay.
+Kettely: Because they know they are getting real value.
+Ita: That's the difference – he gives knowledge, not just code.
+Kettely: And he teaches his kids to do the same.
+Ita: They will become self‑sustainable, just like him.
+Kettely: And then they will teach their own children.
+Ita: That is the legacy of a true educator."""
     
-    # Conversation 2: More details, humor, and practical lesson
-    conv2 = f"""
-**Kettely:** Ita, I was thinking about how Gesner struggled to learn programming.
-
-**Ita:** He didn't even have a proper computer at first. He used the library's old machine.
-
-**Kettely:** And when it broke, he fixed it himself!
-
-**Ita:** That's when I knew he would become an engineer.
-
-**Kettely:** Now he builds entire software companies from his laptop.
-
-**Ita:** And he sells his products to people all over the world.
-
-**Kettely:** Remember when he sold his first software for $20? He was so happy.
-
-**Ita:** Now his courses cost $299, and people are happy to pay.
-
-**Kettely:** Because they know they are getting real value.
-
-**Ita:** That's the difference – he gives knowledge, not just code.
-
-**Kettely:** And he teaches his kids to do the same.
-
-**Ita:** They will become self‑sustainable, just like him.
-
-**Kettely:** And then they will teach their own children.
-
-**Ita:** That is the legacy of a true educator.
-"""
-    
-    # Conversation 3: Looking forward, inspiring others
-    conv3 = f"""
-**Ita:** Kettely, what advice would you give to other parents?
-
-**Kettely:** Believe in your child's dreams, even if they seem impossible.
-
-**Ita:** And for the children?
-
-**Kettely:** Never stop learning. Use the internet. Build things. Fail, then try again.
-
-**Ita:** Gesner failed many times, but he never gave up.
-
-**Kettely:** That's why he is where he is today.
-
-**Ita:** He now teaches his own children the same lesson.
-
-**Kettely:** And they are already building their own software.
-
-**Ita:** Gesner Junior is learning Python, Roosevelt is designing websites.
-
-**Kettely:** Sebastien is mastering AI, and Zendaya is organizing the whole family business.
-
-**Ita:** Together, they will change Haiti and the world.
-
-**Kettely:** May we rest in peace knowing that our blood carries the seed of innovation.
-
-**Ita:** And may God guide them always.
-
-**Kettely:** Amen.
-"""
+    # Conversation 3
+    conv3 = f"""Ita: Kettely, what advice would you give to other parents?
+Kettely: Believe in your child's dreams, even if they seem impossible.
+Ita: And for the children?
+Kettely: Never stop learning. Use the internet. Build things. Fail, then try again.
+Ita: Gesner failed many times, but he never gave up.
+Kettely: That's why he is where he is today.
+Ita: He now teaches his own children the same lesson.
+Kettely: And they are already building their own software.
+Ita: Gesner Junior is learning Python, Roosevelt is designing websites.
+Kettely: Sebastien is mastering AI, and Zendaya is organizing the whole family business.
+Ita: Together, they will change Haiti and the world.
+Kettely: May we rest in peace knowing that our blood carries the seed of innovation.
+Ita: And may God guide them always.
+Kettely: Amen."""
     
     return [conv1, conv2, conv3]
 
 # ========== LARGE BASE LISTS (Vocabulary, Idioms, Grammar, Essays) ==========
-# (same as before, unchanged for brevity – but they are included in the full code)
-# For the final answer, we include them again to make the file complete.
 vocab_base = [
     "abandon", "abrupt", "absorb", "abundant", "accelerate", "accessible", "accommodate", "accompany",
     "accomplish", "accurate", "accuse", "achieve", "acknowledge", "acquire", "adapt", "adequate",
